@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import adminEmails from './adminEmails';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {    
 
@@ -11,7 +11,7 @@ function Login() {
     const [userType, setUserType] = useState('Student');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,9 +39,10 @@ function Login() {
 
             const { data } = await axios.post("/api/users/login", requestData, config);
             
-            //console.log("hi")
+            console.log("hi")
             console.log(data);
             setError('Login Successfully')
+            navigate('/dashboard');
             localStorage.setItem("userInfo", JSON.stringify(data));
             setLoading(false);
 

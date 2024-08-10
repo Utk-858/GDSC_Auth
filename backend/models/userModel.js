@@ -5,9 +5,27 @@ const bcrypt = require('bcrypt');
 const userSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }, // Password field
+  password: { type: String, required: true }, 
 });
 
+
+const projectSchema = new mongoose.Schema({
+  projectName: {
+      type: String,
+      required: true,
+  },
+  
+  gitRepoLink: {
+      type: String,
+      required: true,
+      validate: {
+          validator: function (v) {
+              return /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(v);
+          },
+          message: 'Invalid GitHub repository link',
+      },
+  },
+});
 
 
 userSchema.pre('save',async function(next){
@@ -21,9 +39,12 @@ userSchema.pre('save',async function(next){
 
 })
 
-userSchema.methods.matchPassword = async function(enteredPassword){
+userSchema.methods.matchPassword = async function(enteredPassword)
+{
   return await bcrypt.compare(enteredPassword,this.password);
 };
 
 const User = mongoose.model('User', userSchema);
-module.exports = User;
+const Project = mongoose.model('Project', projectSchema);
+
+module.exports = {User,Project};

@@ -1,9 +1,31 @@
-import React from "react";
+import React from 'react';
+import DashboardHeader from './components/DashboardHeader'
+import DashboardPage from './dashboardPage';
 
-function Dashboard(){
+const handleEditProjects = async(e) =>{
+    e.preventDefault();
+
+};
+
+const handleViewProjects = async(e) =>{
+    e.preventDefault();
+};
+
+const handleDeleteProjects = async(e) =>{
+    e.preventDefault();
+};
+
+const Dashboard = () => {
     return (
-        <div><Dashboard></Dashboard></div>
+        <div>
+            <DashboardHeader 
+                onViewProjects={handleViewProjects}
+                onEditProjects={handleEditProjects}
+                onDeleteProjects={handleDeleteProjects}
+            />
+            <DashboardPage />
+        </div>
     );
-}
+};
 
 export default Dashboard;

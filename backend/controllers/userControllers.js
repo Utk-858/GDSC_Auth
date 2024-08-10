@@ -1,4 +1,5 @@
-const User = require('../models/userModel');
+const {User} = require('../models/userModel');
+const {Project} =  require('../models/userModel');
 const asyncHandler = require('express-async-handler');
 const generateToken = require('../utils/generateToken');
 const nodemailer = require('nodemailer');
@@ -77,4 +78,21 @@ const authUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { registerUser, authUser };
+
+const projectInfo = asyncHandler(async (req, res) => {
+    console.log('hi')
+    const { projectName, gitRepoLink } = req.body;
+
+    const info = await Project.create({
+        projectName,
+        gitRepoLink,
+    });
+
+        res.json({
+            projectName: info.projectName,
+            gitRepoLink: info.gitRepoLink,
+        });
+});
+
+
+module.exports = { registerUser, authUser, projectInfo };
