@@ -17,7 +17,8 @@ function Login() {
         e.preventDefault();
 
         if (userType === 'Admin' && adminEmails.includes(email)) {
-            console.log("Admin logged successfully")
+            
+            navigate('/dashboard',{ state: { email: email } });
             setError('Admin logged successfully')
             return;
         }
@@ -28,7 +29,6 @@ function Login() {
                     "Content-type": "application/json"
                 }
             }
-
             setLoading(true);
 
             const requestData = {
@@ -39,10 +39,10 @@ function Login() {
 
             const { data } = await axios.post("/api/users/login", requestData, config);
             
-            console.log("hi")
+            //console.log("hi")
             console.log(data);
-            setError('Login Successfully')
-            navigate('/dashboard');
+
+            navigate('/dashboard',{ state: { email: email } });
             localStorage.setItem("userInfo", JSON.stringify(data));
             setLoading(false);
 

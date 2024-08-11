@@ -13,6 +13,7 @@ const projectSchema = new mongoose.Schema({
   projectName: {
       type: String,
       required: true,
+      unique: true,
   },
   
   gitRepoLink: {
@@ -24,7 +25,12 @@ const projectSchema = new mongoose.Schema({
           },
           message: 'Invalid GitHub repository link',
       },
+      unique: true,
   },
+  email: { 
+    type: String,
+     required: true,
+    },
 });
 
 

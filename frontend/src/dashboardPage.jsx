@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import '../src/styles/dashboard.css'
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 
-
-const DashboardPage = () => {
+const DashboardPage = ({userEmail}) => {
     const [projectName, setProjectName] = useState('');
     const [repositoryLink, setRepositoryLink] = useState('');
+
     const [thumbnail, setThumbnail] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [error, setError] = useState('')
+
+    const location = useLocation();
+    const { email } = location.state || {};
 
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -21,16 +25,17 @@ const DashboardPage = () => {
                     "Content-type": "application/json"
                 }
             }
-            
             const requestData = {
                 projectName,
                 repositoryLink,
+                email,
             };
             
-            const { data } = await axios.post('/api/users/dashboard', requestData, config);
-            
-            console.log(data);
-            localStorage.setItem("userInfo", JSON.stringify(data));
+            const {note}  = await axios.post('/api/users/dashboard', requestData,config);
+            alert('hi')
+            console.log(note);
+            localStorage.setItem("userInfo", JSON.stringify(note));
+            setSuccessMessage("Project added successfully!");
 
         } catch (error) {
             setError(error.response.data.message);
@@ -75,16 +80,16 @@ const DashboardPage = () => {
                     />
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="thumbnail">Thumbnail:</label>
-                    <input
-                        type="file"
-                        id="thumbnail"
-                        onChange={handleFileChange}
-                        accept="image/*"
-                    />
-                </div>
 
+                <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                    type="email" // changed from "url" to "email"
+                    id="Email"
+                    value={email} // set the fixed value
+                    required
+                />
+                </div>
                 <button type="submit" className="submit-button">Add Project</button>
             </form>
         </div>

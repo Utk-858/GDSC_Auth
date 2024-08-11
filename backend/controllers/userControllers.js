@@ -6,31 +6,6 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 
-const sendWelcomeEmail = async (email,name) => {
-    let transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-        }
-    });
-
-    let mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: email, 
-        subject: 'Welcome to Our App', 
-        text: `Hello ${name},\n\nThank you for registering on our app.\n\nBest Regards,\nYour App Team`, // plain text body
-        html: `<b>Hello ${name}</b><br>Thank you for registering on our app.<br><br>Best Regards,<br>Your App Team` // html body
-    };
-
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log('Email sent successfully');
-    } catch (error) {
-        console.error('Error sending email: ', error);
-    }
-};
-
 
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
@@ -47,8 +22,6 @@ const registerUser = asyncHandler(async (req, res) => {
     });
 
     if (user) {
-
-        await sendWelcomeEmail(user.email, user.name);
         
         res.json({
             _id: user._id,
@@ -78,21 +51,46 @@ const authUser = asyncHandler(async (req, res) => {
     }
 });
 
-
 const projectInfo = asyncHandler(async (req, res) => {
-    console.log('hi')
-    const { projectName, gitRepoLink } = req.body;
+    
+    const { projectName, gitRepoLink,email } = req.body;
+    // const existingProject = await Project.findOne({ $or: [{ projectName }, { gitRepoLink },{email}] });
+
+    // if (existingProject) {
+    //     return res.status(400).json({ message: 'Project with this name or Git repo link already exists.' });
+    // }
 
     const info = await Project.create({
         projectName,
         gitRepoLink,
+        email,
     });
 
-        res.json({
-            projectName: info.projectName,
-            gitRepoLink: info.gitRepoLink,
-        });
+    res.json({
+        _id: info._id,
+        projectName: info.projectName,
+        gitRepoLink: info.gitRepoLink,
+        email:info.email,
+    });
 });
 
 
-module.exports = { registerUser, authUser, projectInfo };
+const database = asyncHandler(async (req, res) => {
+    const projects = await Project.find();
+    res.json(projects);
+});
+
+
+const deletion = async(req,res) =>{
+    try {
+        const project = await Project.findByIdAndDelete(req.params.id);
+        if (!project) {
+          return res.status(404).send("Project not found");
+        }
+        res.send("Project deleted successfully");
+      } catch (error) {
+        res.status(500).send("Failed to delete project");
+      }
+}
+
+module.exports = { registerUser, authUser, projectInfo ,database,deletion };
