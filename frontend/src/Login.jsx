@@ -8,7 +8,7 @@ function Login() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [userType, setUserType] = useState('Student');
+    const  [userType, setUserType] = useState('Student');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate(); 
@@ -53,8 +53,8 @@ function Login() {
     }
 
     return (
-        <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
-            <div className="bg-white p-3 rounded w-25">
+        <div className="d-flex justify-content-center align-items-center vh-100"  style={{background:"#F3F4F9"}} >
+            <div className="bg-white p-3 rounded w-25" style={{boxShadow:"0px 0px 15px 5px rgba(0, 0, 0, 0.05)"}} >
                 <h2><center>Login</center></h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
@@ -91,7 +91,7 @@ function Login() {
                             />
                         </div>
                     )}
-                    <button type="submit" className="btn btn-success w-100 rounded-0">
+                    <button type="submit" className="btn btn-success w-100 rounded-0" style={{background:"#007aff"}}>
                         {loading ? 'Logging in...' : 'Login'}
                     </button>
                     {error && <div className="alert alert-danger mt-3">{error}</div>}

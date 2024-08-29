@@ -8,7 +8,7 @@ const Home = () => {
       <p style={styles.description}>Join us today and explore amazing features!</p>
       <div style={styles.links}>
         <Link to="/login" style={styles.link}>Login</Link>
-        <Link to="/signup" style={styles.link}>Signup</Link>
+        <Link to="/register" style={styles.link}>Signup</Link>
       </div>
     </div>
   );
